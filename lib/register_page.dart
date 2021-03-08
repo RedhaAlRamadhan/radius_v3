@@ -660,9 +660,11 @@ class _RegisterPageState extends State<RegisterPage>
                   });
                 } else {
                   checkValue = value;
-                  setState(() {
-                    beaconStatus = 0;
-                  });
+                  setState(
+                    () {
+                      beaconStatus = 0;
+                    },
+                  );
                 }
               },
               style: TextStyle(fontSize: 20),

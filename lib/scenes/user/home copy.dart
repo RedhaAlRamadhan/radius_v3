@@ -474,35 +474,35 @@ class _Home extends State<Home> with WidgetsBindingObserver {
     );
   }
 
-  Resturant createResturant(String resturanteRef) {
-    Resturant tempResturant;
-    bool why = false;
-    print(resturanteRef + "jhgvjhg");
-    mDatabase
-        .child("Resturants")
-        .child("KFC")
-        .once()
-        .then((DataSnapshot snapshot) {
-      Map<dynamic, dynamic> map = snapshot.value;
-      // print(value['uuid'].toString() + " WHY");
+  // Resturant createResturant(String resturanteRef) {
+  //   Resturant tempResturant;
+  //   bool why = false;
+  //   print(resturanteRef + "jhgvjhg");
+  //   mDatabase
+  //       .child("Resturants")
+  //       .child("KFC")
+  //       .once()
+  //       .then((DataSnapshot snapshot) {
+  //     Map<dynamic, dynamic> map = snapshot.value;
+  //     // print(value['uuid'].toString() + " WHY");
 
-      try {
-        print(snapshot.value['ImageURL'] + " WHY");
-        tempResturant = Resturant(
-            avaliable:
-                bool.fromEnvironment(snapshot.value['Availability'].toString()),
-            imageURL: snapshot.value['ImageURL'],
-            title: snapshot.key,
-            uuid: snapshot.value['uuid'],
-            items: <Item>[]);
-        print(tempResturant.imageURL);
-      } catch (e) {
-        print(e);
-      }
-    }).whenComplete(() => why = true);
-    print(why);
-    if (why) return tempResturant;
-  }
+  //     try {
+  //       print(snapshot.value['ImageURL'] + " WHY");
+  //       tempResturant = Resturant(
+  //           avaliable:
+  //               bool.fromEnvironment(snapshot.value['Availability'].toString()),
+  //           imageURL: snapshot.value['ImageURL'],
+  //           title: snapshot.key,
+  //           uuid: snapshot.value['uuid'],
+  //           items: <Item>[]);
+  //       print(tempResturant.imageURL);
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   }).whenComplete(() => why = true);
+  //   print(why);
+  //   if (why) return tempResturant;
+  // }
 }
 
 class OrderCard extends StatelessWidget {

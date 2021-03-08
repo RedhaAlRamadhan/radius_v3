@@ -9,6 +9,10 @@ import 'package:radius_v3/scenes/user/Home.dart';
 import 'package:radius_v3/scenes/user/home copy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:radius_v3/signin_page.dart';
+
+import 'scenes/Owner_Pages/Home_Owner.dart';
+import 'scenes/Owner_Pages/Menu_Screen.dart';
+import 'scenes/Owner_Pages/Orders_screen.dart';
 // import 'package:project/signin_page.dart';
 // import 'package:radius_v3/test copy.dart';
 // import 'package:project/login.dart';
@@ -40,6 +44,10 @@ Future<void> main() async {
     MaterialApp(
       title: 'Navigation Basics',
       home: MyApp(),
+      theme: ThemeData(
+        primaryColor: Colors.blueGrey[500],
+        accentColor: Colors.blueGrey[100],
+      ),
     ),
   );
 }
@@ -159,16 +167,20 @@ class MyApp extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(
+                          builder: (context) => Home_Owener(),
+                        ),
                       );
                     },
                   ),
                   ElevatedButton(
-                    child: Text('Open Home 25%'),
+                    child: Text('Open Menu 25%'),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(
+                          builder: (context) => MenuScreen(),
+                        ),
                       );
                     },
                   ),
@@ -177,7 +189,9 @@ class MyApp extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(
+                          builder: (context) => OrdersScreen(),
+                        ),
                       );
                     },
                   ),
