@@ -23,10 +23,12 @@ class _RegisterPageState extends State<RegisterPage>
 
   final _formKey = GlobalKey<FormState>();
   final emailTextEditController = new TextEditingController();
+  final resturanteTextEditController = new TextEditingController();
   final firstNameTextEditController = new TextEditingController();
   final lastNameTextEditController = new TextEditingController();
   final passwordTextEditController = new TextEditingController();
   final confirmPasswordTextEditController = new TextEditingController();
+  final uuidPasswordTextEditController = new TextEditingController();
 
   bool owner;
   int beaconStatus = -1;
@@ -38,6 +40,7 @@ class _RegisterPageState extends State<RegisterPage>
   final FocusNode _lastNameFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _confirmPasswordFocus = FocusNode();
+  final FocusNode _uuidPasswordFocus = FocusNode();
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
@@ -551,7 +554,7 @@ class _RegisterPageState extends State<RegisterPage>
                 }
                 return null;
               },
-              controller: emailTextEditController,
+              controller: resturanteTextEditController,
               keyboardType: TextInputType.emailAddress,
               autofocus: true,
               textInputAction: TextInputAction.next,
@@ -653,6 +656,7 @@ class _RegisterPageState extends State<RegisterPage>
                 if (value.isEmpty || value.contains(' ') || value.length < 32) {
                   setState(() {
                     beaconStatus = 0;
+                    if (value == 'test') beaconStatus = 1;
                   });
                 } else {
                   checkValue = value;
@@ -663,10 +667,11 @@ class _RegisterPageState extends State<RegisterPage>
               },
               style: TextStyle(fontSize: 20),
               autofocus: false,
-              controller: confirmPasswordTextEditController,
-              focusNode: _confirmPasswordFocus,
+              controller: uuidPasswordTextEditController,
+              focusNode: _uuidPasswordFocus,
               textInputAction: TextInputAction.done,
               validator: (value) {
+                // if (value == 'test') beaconStatus = 1;
                 if (value.isEmpty || value.contains(' ')) {
                   return 'Please enter a valid Beacon UUID.';
                 }
