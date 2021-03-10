@@ -7,7 +7,6 @@ import 'dart:io' show Platform;
 // import 'package:barcode/barcode.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:radius_v3/model/item.dart';
 import 'package:radius_v3/model/order.dart';
 
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -23,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:radius_v3/model/resturant.dart';
-import 'package:radius_v3/scenes/user/menu.dart';
+import 'package:radius_v3/scenes/user/menu copy.dart';
 
 import '../../signin_page.dart';
 
@@ -133,12 +132,12 @@ class _Home extends State<Home> with WidgetsBindingObserver {
                 try {
                   // print(snapshot.value['ImageURL'] + " WHY");
                   tempRestaurante = Resturant(
-                      avaliable: bool.fromEnvironment(
-                          snapshot.value['Availability'].toString()),
-                      imageURL: snapshot.value['ImageURL'],
-                      title: snapshot.value['name'],
-                      uuid: snapshot.key,
-                      items: <Item>[]);
+                    avaliable: bool.fromEnvironment(
+                        snapshot.value['Availability'].toString()),
+                    imageURL: snapshot.value['ImageURL'],
+                    title: snapshot.value['name'],
+                    uuid: snapshot.key,
+                  );
                   print(tempRestaurante.imageURL);
                 } catch (e) {
                   print(e);
@@ -280,11 +279,11 @@ class _Home extends State<Home> with WidgetsBindingObserver {
 
                     // print(snapshot.value['ImageURL'] + " WHY");
                     tempRestaurante = Resturant(
-                        avaliable: snapshot.value['Availability'],
-                        imageURL: snapshot.value['ImageURL'],
-                        title: snapshot.value['name'],
-                        uuid: snapshot.key,
-                        items: <Item>[]);
+                      avaliable: snapshot.value['Availability'],
+                      imageURL: snapshot.value['ImageURL'],
+                      title: snapshot.value['name'],
+                      uuid: snapshot.key,
+                    );
                     // print(tempRestaurante.imageURL);
                     foundBeacons[_beacon.proximityUUID] = tempRestaurante;
                   } catch (e) {
@@ -638,7 +637,10 @@ class ResturantCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        print("clicked");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Menu(resturant)),
+        );
       },
       child: Container(
         height: 250,

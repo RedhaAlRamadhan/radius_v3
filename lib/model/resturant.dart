@@ -1,10 +1,7 @@
-import 'item.dart';
-
 class Resturant {
   final String title;
   final String uuid;
   final String imageURL;
-  final List<Item> items;
   bool avaliable;
 
   Resturant({
@@ -12,14 +9,12 @@ class Resturant {
     this.uuid,
     this.imageURL,
     this.avaliable,
-    this.items,
   });
 
   Map toJson() => {
         'title': title,
         'uuid': uuid,
         'imageURL': imageURL,
-        'items': items,
         'avaliable': avaliable,
       };
 }
