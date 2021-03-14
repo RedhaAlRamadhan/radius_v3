@@ -425,7 +425,7 @@ class _Home extends State<Home> with WidgetsBindingObserver {
         centerTitle: true,
         backgroundColor: new Color(0xFF393e46),
         title: Text(
-          'Nearby',
+          'Radius',
           style: TextStyle(
             fontSize: 40,
             fontWeight: FontWeight.bold,

@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:radius_v3/model/resturant.dart';
 import 'package:radius_v3/model/resturant.dart';
 import 'package:radius_v3/scenes/user/item.dart';
+import 'package:radius_v3/globals.dart';
+
+import 'cart.dart';
 
 class Menu extends StatefulWidget {
   final Resturant resturant;
@@ -15,7 +18,6 @@ class Menu extends StatefulWidget {
 
 class _Menu extends State<Menu> {
   final Resturant resturant;
-  double price = 0;
   int indexOfCategory = 0;
 
   var mDatabase = FirebaseDatabase.instance.reference();
@@ -28,6 +30,7 @@ class _Menu extends State<Menu> {
   // initstat
   @override
   void initState() {
+    resturanteRef = resturant.uuid;
     mDatabase
         .reference()
         .child("Resturants")
@@ -119,56 +122,60 @@ class _Menu extends State<Menu> {
                 SliverPersistentHeader(
                   pinned: true,
                   delegate: PersistentHeader(
-                    widget: Center(
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: map.values.length,
-                        itemBuilder: (context, index) => Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                indexOfCategory = index;
-                              });
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                              ),
-                              // color: Colors.green,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    map.keys.elementAt(index),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: index == indexOfCategory
-                                          ? Colors.black
-                                          : Colors.black.withOpacity(0.5),
+                    widget: (map != null)
+                        ? Center(
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: map.values.length,
+                              itemBuilder: (context, index) => Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      indexOfCategory = index;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    // color: Colors.green,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          map.keys.elementAt(index),
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: index == indexOfCategory
+                                                ? Colors.black
+                                                : Colors.black.withOpacity(0.5),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 4,
+                                        ),
+                                        Container(
+                                          width: 50,
+                                          height: 3,
+                                          decoration: BoxDecoration(
+                                            color: index == indexOfCategory
+                                                ? Colors.black
+                                                : Colors.transparent,
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Container(
-                                    width: 50,
-                                    height: 3,
-                                    decoration: BoxDecoration(
-                                      color: index == indexOfCategory
-                                          ? Colors.black
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
+                          )
+                        : Container(),
                   ),
                 ),
                 SliverList(
@@ -177,49 +184,92 @@ class _Menu extends State<Menu> {
                     // The builder function returns a ListTile with a title that
                     // displays the index of the current item.
                     (content, index) {
-                      return createItems(index);
+                      return (map != null)
+                          ? createItems(index)
+                          : Padding(
+                              padding: EdgeInsets.only(top: 100),
+                              child: Center(
+                                child: SizedBox(
+                                  width: 300,
+                                  height: 300,
+                                  child: CircularProgressIndicator(
+                                    backgroundColor: Colors.blue[50],
+                                    strokeWidth: 8,
+                                  ),
+                                ),
+                              ),
+                            );
                     },
-                    childCount: map.keys.length,
+                    childCount: (map != null) ? map.keys.length : 1,
                   ),
                 ),
               ],
             ),
-            Positioned(
-              bottom: 15,
-              left: 10,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.green[400],
-                ),
-                height: 55,
-                width: 432,
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "View Cart",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
+            (totalPrice > 0)
+                ? Padding(
+                    padding: EdgeInsets.all(25),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => Cart()))
+                            .then((value) => setState(() {}));
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // Expanded(
+                          // child:
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.green[400],
+                            ),
+                            height: 55,
+                            // width: 432,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "View Cart",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          totalPrice.toString(),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 24,
+                                          ),
+                                        ),
+                                        Text(
+                                          " Riyal",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 24,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        Text(
-                          "50",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                          ),
-                        ),
-                      ],
+                          // ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-            ),
+                  )
+                : Container(),
           ],
         ),
       ),
@@ -261,7 +311,13 @@ class _Menu extends State<Menu> {
                   builder: (context) => Item(
                         map: map.values.elementAt(index),
                         id: int.parse(map.keys.elementAt(index).toString()),
-                      )));
+                        price: map.values.elementAt(index)["price"],
+                      ))).then((value) => setState(() {
+                refreshTotalPrice();
+              }));
+          // setState(() {
+          //   price += map.values.elementAt(index)['price'];
+          // });
         },
         child: Card(
           elevation: 1,

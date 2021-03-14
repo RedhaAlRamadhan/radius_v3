@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ffi';
 
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter/foundation.dart';
@@ -9,6 +10,7 @@ import 'package:radius_v3/scenes/user/Home.dart';
 import 'package:radius_v3/scenes/user/home copy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:radius_v3/signin_page.dart';
+import 'package:radius_v3/globals.dart';
 
 import 'scenes/Owner_Pages/Home_Owner.dart';
 import 'scenes/Owner_Pages/Menu_Screen.dart';
@@ -19,6 +21,7 @@ import 'scenes/Owner_Pages/Orders_screen.dart';
 // import 'package:radius_v3/FirebaseTest.dart';
 
 Future<void> main() async {
+  // print(test);
   WidgetsFlutterBinding.ensureInitialized();
   // final FirebaseApp app = await Firebase.initializeApp(
   //   name: 'Grad-Project-Radius',

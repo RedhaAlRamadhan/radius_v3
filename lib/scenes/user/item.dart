@@ -1,36 +1,44 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:radius_v3/globals.dart';
 import 'package:radius_v3/main.dart';
 import 'package:radius_v3/model/resturant.dart';
 import 'package:radius_v3/model/resturant.dart';
+import 'dart:ffi';
 
 class Item extends StatefulWidget {
   final Map map;
   final int id;
+  final int price;
 
   const Item({
     this.id,
     this.map,
+    this.price,
   });
   Map toJson() => {
         'id': id,
         'map': map,
+        'price': price,
       };
 
   @override
-  _Item createState() => _Item(map, id);
+  _Item createState() => _Item(map, id, price);
 }
 
 class _Item extends State<Item> {
-  double price = 0;
   int indexOfCategory = 0;
   final int id;
   final Map map;
+  final int price;
+  int additionPrice = 0;
+  List<bool> checkboxes = [];
+  int quantity = 1;
 
   var mDatabase = FirebaseDatabase.instance.reference();
 
-  _Item(this.map, this.id);
+  _Item(this.map, this.id, this.price);
 
   // List<String> categories = [];
 
@@ -55,7 +63,11 @@ class _Item extends State<Item> {
     //   });
     // });
     // print(map['Extras']);
-    print(map["Extras"].values.elementAt(0)['imageURL']);
+    print(price);
+    checkboxes = List(map["Extras"].values.length);
+    for (var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i] = false;
+    }
     print("Start");
     super.initState();
   }
@@ -153,17 +165,95 @@ class _Item extends State<Item> {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.green[400],
                 ),
-                height: 55,
+                height: 75,
                 width: 432,
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
                   child: Center(
-                    child: Text(
-                      "Add",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            print("Pressed -");
+                            if (quantity > 1)
+                              setState(() {
+                                quantity--;
+                              });
+                          },
+                          child: SizedBox(
+                            child: Text(
+                              "   −   ",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        VerticalDivider(
+                          thickness: 2,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            refreshTotalPrice();
+                            cartContents.add(CartContent(id, map["title"],
+                                map["imageURL"], price, quantity));
+                            print("Pressed Add");
+                            Navigator.pop(context);
+                          },
+                          child: SizedBox(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 2),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "    Add " + quantity.toString() + "    ",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 35,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    ((price + additionPrice) * quantity)
+                                            .toString() +
+                                        " Riyal",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 35,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        VerticalDivider(
+                          thickness: 2,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            print("Pressed +");
+                            setState(() {
+                              quantity++;
+                            });
+                          },
+                          child: SizedBox(
+                            // width: 10,
+                            child: Text(
+                              "   +   ",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -195,7 +285,8 @@ class _Item extends State<Item> {
   }
 
   Widget createExtra(index) {
-    print(1);
+    print(checkboxes.length);
+    // checkboxes[index] = false;
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -210,6 +301,16 @@ class _Item extends State<Item> {
           //     MaterialPageRoute(
           //       builder: (context) => Item(map.values.elementAt(index)),
           //     ));
+          setState(() {
+            // checkboxes[checkboxes.length - 1] = false;
+            // print("object " + index.toString() + checkboxes[index].toString());
+            checkboxes[index] = !checkboxes[index];
+            additionPrice = additionPrice +
+                (map["Extras"].values.elementAt(index)['price'] *
+                    (checkboxes[index] ? 1 : -1));
+
+            print(quantity);
+          });
         },
         child: Card(
           elevation: 1,
@@ -254,9 +355,9 @@ class _Item extends State<Item> {
               Expanded(
                 flex: 1,
                 child: Checkbox(
-                  value: false,
+                  value: checkboxes[index],
                   onChanged: (value) {
-                    // !value;
+                    checkboxes[index] = !checkboxes[index];
                   },
                 ),
               )
