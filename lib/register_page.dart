@@ -778,8 +778,8 @@ class _RegisterPageState extends State<RegisterPage>
                   .set(
                 {
                   "Email": emailTextEditController.text,
-                  "Resturante Title": firstNameTextEditController.text,
-                  "Resturante UUID": lastNameTextEditController.text,
+                  "Resturante Title": resturanteTextEditController.text,
+                  "Resturante UUID": uuidPasswordTextEditController.text,
                 },
               );
             } else {
