@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
+import 'package:radius_v3/scenes/Owner_Pages/Home_Owner.dart';
 import 'package:radius_v3/scenes/user/home copy.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -782,6 +783,11 @@ class _RegisterPageState extends State<RegisterPage>
                   "Resturante UUID": uuidPasswordTextEditController.text,
                 },
               );
+              dispose();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Home_Owener()),
+              );
             } else {
               FirebaseDatabase.instance
                   .reference()
@@ -793,6 +799,11 @@ class _RegisterPageState extends State<RegisterPage>
                   "FirstName": firstNameTextEditController.text,
                   "LastName": lastNameTextEditController.text,
                 },
+              );
+              dispose();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
               );
             }
           },
@@ -809,12 +820,6 @@ class _RegisterPageState extends State<RegisterPage>
           },
         );
       }
-
-      dispose();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Home()),
-      );
     } catch (e) {
       setState(() {
         signuping = false;
