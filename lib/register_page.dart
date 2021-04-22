@@ -32,7 +32,7 @@ class _RegisterPageState extends State<RegisterPage>
   final uuidPasswordTextEditController = new TextEditingController();
 
   bool owner;
-  int beaconStatus = -1;
+  int beaconStatus = 1; //change to -1
   bool signuping = false;
 
   final FocusNode _emailFocus = FocusNode();
@@ -136,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage>
           for (var _beacon in result.beacons) {
             if (_beacon.proximityUUID == checkValue) {
               setState(() {
-                beaconStatus = 1;
+                // beaconStatus = 1; //uncomment this
               });
             }
           }
@@ -656,14 +656,14 @@ class _RegisterPageState extends State<RegisterPage>
               onChanged: (value) async {
                 if (value.isEmpty || value.contains(' ') || value.length < 32) {
                   setState(() {
-                    beaconStatus = 0;
+                    // beaconStatus = 0; //uncomment this
                     if (value == 'test') beaconStatus = 1;
                   });
                 } else {
                   checkValue = value;
                   setState(
                     () {
-                      beaconStatus = 0;
+                      // beaconStatus = 0; //uncoment this
                     },
                   );
                 }
@@ -781,6 +781,19 @@ class _RegisterPageState extends State<RegisterPage>
                   "Email": emailTextEditController.text,
                   "Resturante Title": resturanteTextEditController.text,
                   "Resturante UUID": uuidPasswordTextEditController.text,
+                },
+              );
+              FirebaseDatabase.instance
+                  .reference()
+                  .child("Resturants")
+                  .child(uuidPasswordTextEditController.text)
+                  .set(
+                {
+                  "Availability": true,
+                  "ImageURL":
+                      "https://stugcearar.com/wp-content/uploads/2018/07/empty_baslik.png",
+                  "description": "Tset",
+                  "name": resturanteTextEditController.text,
                 },
               );
               dispose();
